@@ -62,5 +62,7 @@ public class Cell {
 
 	private final long x, y;
 
-	private static final Collection<Cell> NEIGHBOURS = select(allCombinationsOf(Cell.class, range(-1, 1), range(-1, 1)), not(new Cell(0, 0)));
+	static final Collection<Cell>
+			NEIGHBOURS_AND_SELF = allCombinationsOf(Cell.class, range(-1, 1), range(-1, 1)),
+			NEIGHBOURS = select(NEIGHBOURS_AND_SELF, not(equalTo(new Cell(0, 0))));
 }

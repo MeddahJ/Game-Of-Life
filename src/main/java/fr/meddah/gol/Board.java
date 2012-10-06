@@ -9,17 +9,18 @@ import com.google.common.collect.ContiguousSet;
 import static ch.lambdaj.Lambda.*;
 import static ch.lambdaj.collection.LambdaCollections.*;
 import static com.google.common.base.Strings.*;
+import static fr.meddah.gol.Cell.*;
 import static fr.meddah.gol.Tools.*;
 import static java.lang.String.*;
 
 public class Board implements Iterable<Cell> {
 
 	public Board next() {
-		return new Board(select(livingCellsAndNeighbours(), having(on(Cell.class).willBeAliveAmong(livingCells))));
+		return new Board(select(aliveCellsAndNeighbours(), having(on(Cell.class).willBeAliveAmong(aliveCells))));
 	}
 
-	private Set<Cell> livingCellsAndNeighbours() {
-		return flatMap(livingCells, on(Cell.class).cellsBy(NEIGHBOURS_AND_SELF));
+	private Set<Cell> aliveCellsAndNeighbours() {
+		return flatMap(aliveCells, on(Cell.class).cellsBy(NEIGHBOURS_AND_SELF));
 	}
 
 	public boolean hasCells() {
@@ -28,23 +29,21 @@ public class Board implements Iterable<Cell> {
 
 	@Override
 	public String toString() {
-		ContiguousSet<Long> abscissae = range(minFrom(livingCells).getX(), maxFrom(livingCells).getX());
-		ContiguousSet<Long> ordinates = range(minFrom(livingCells).getY(), maxFrom(livingCells).getY());
-		return with(allCombinationsOf(Cell.class, abscissae, ordinates)).extract(on(Cell.class).isAliveAmong(livingCells)).join("")
+		ContiguousSet<Long> abscissae = range(minFrom(aliveCells).getX(), maxFrom(aliveCells).getX());
+		ContiguousSet<Long> ordinates = range(minFrom(aliveCells).getY(), maxFrom(aliveCells).getY());
+		return with(allCombinationsOf(Cell.class, abscissae, ordinates)).extract(on(Cell.class).isAliveAmong(aliveCells)).join("")
 				.replace("true", "X").replace("false", " ").replaceAll(format(".{%d}", abscissae.size()), "$0\n")
 				+ repeat("-", abscissae.size());
 	}
 
 	@Override
 	public Iterator<Cell> iterator() {
-		return livingCells.iterator();
+		return aliveCells.iterator();
 	}
 
-	public Board(Collection<Cell> livingCells) {
-		this.livingCells = livingCells;
+	public Board(Collection<Cell> cells) {
+		this.aliveCells = cells;
 	}
 
-	private final Collection<Cell> livingCells;
-
-	private static final Collection<Cell> NEIGHBOURS_AND_SELF = allCombinationsOf(Cell.class, range(-1, 1), range(-1, 1));
+	private final Collection<Cell> aliveCells;
 }

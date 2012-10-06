@@ -1,60 +1,43 @@
 package fr.meddah.gol;
 
+import java.util.Collections;
+
 import org.junit.Test;
 
 import static fr.meddah.gol.Pattern.*;
-import static java.util.Arrays.*;
 import static org.fest.assertions.Assertions.*;
 
 public class BoardTest {
 
-	private Board board;
-
-	@Test
-	public void basic_board_tests() {
-		board = board(new Cell(0, 0), new Cell(0, 1));
-		assertThat(board.hasCells());
-		assertThat(board).containsOnly(new Cell(0, 0), new Cell(0, 1));
-	}
-
 	@Test
 	public void empty_board_remains_empty() {
-		board = board();
+		Board board = new Board(Collections.<Cell> emptyList());
 		assertThat(board.hasCells()).isFalse();
-		assertThat(board.next()).isEmpty();
+		assertThat(board.next().hasCells()).isFalse();
 	}
 
 	@Test
-	public void block_stabilizes() {
-		board = new Board(BLOCK.getCells());
-		assertThat(board.toString()).contains("XX\nXX");
+	public void board_is_displayed_properly() {
+		Board board = new Board(BLINKER.getCells());
+		assertThat(board.toString()).startsWith("X\nX\nX\n");
+		assertThat(board.next().toString()).startsWith("XXX\n");
+	}
 
-		board = board.next();
-		assertThat(board).containsOnly(BLOCK.getCells().toArray());
-		assertThat(board.toString()).contains("XX\nXX");
+	@Test
+	public void block_is_immobile() {
+		Board blockAfterOneStep = new Board(BLOCK.getCells()).next();
+		assertThat(blockAfterOneStep).containsOnly(BLOCK.getCells().toArray());
 	}
 
 	@Test
 	public void blinker_has_period_of_two_and_is_stationary() {
-		board = new Board(BLINKER.getCells());
-		assertThat(board.toString()).contains("X\nX\nX");
-
-		board = board.next();
-		assertThat(board).containsOnly(new Cell(-1, 1), new Cell(0, 1), new Cell(1, 1));
-		assertThat(board.toString()).contains("XXX");
-
-		board = board.next();
-		assertThat(board).containsOnly(BLINKER.getCells().toArray());
-		assertThat(new Board(BLINKER.getCells()).next().next()).containsOnly(BLINKER.getCells().toArray());
+		Board blinkerAfterTwoSteps = new Board(BLINKER.getCells()).next().next();
+		assertThat(blinkerAfterTwoSteps).containsOnly(BLINKER.getCells().toArray());
 	}
 
 	@Test
-	public void glider_has_period_of_four_and_moves() {
-		board = new Board(GLIDER.getCells()).next().next().next().next();
-		assertThat(board).containsOnly(GLIDER.by(-1, 1).getCells().toArray());
-	}
-
-	private static Board board(Cell... cells) {
-		return new Board(asList(cells));
+	public void glider_has_period_of_four_and_moves_diagonally() {
+		Board gliderAfterFourSteps = new Board(GLIDER.getCells()).next().next().next().next();
+		assertThat(gliderAfterFourSteps).containsOnly(GLIDER.by(-1, 1).getCells().toArray());
 	}
 }

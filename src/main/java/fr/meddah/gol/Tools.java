@@ -19,9 +19,9 @@ public final class Tools {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T, U extends Comparable<U>> Collection<T> allCombinationsOf(Class<T> forClass, ContiguousSet<U> first, ContiguousSet<U> second) {
+	public static <T, U extends Comparable<U>> Collection<T> allCombinationsOf(Class<T> toClass, ContiguousSet<U> first, ContiguousSet<U> second) {
 		Collection<List<U>> constructorArguments = cartesianProduct(first, second);
-		return project(constructorArguments, forClass, on(List.class).get(0), on(List.class).get(1));
+		return project(constructorArguments, toClass, on(List.class).get(0), on(List.class).get(1));
 	}
 
 	public static ContiguousSet<Long> range(long lowerBound, long upperBound) {

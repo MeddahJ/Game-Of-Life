@@ -1,5 +1,6 @@
 package fr.meddah.gol;
 
+import java.util.Collection;
 import java.util.Iterator;
 
 import static ch.lambdaj.Lambda.*;
@@ -14,7 +15,7 @@ public class GameOfLife implements Iterator<GameOfLife> {
 	}
 
 	static GameOfLife firstRound(Pattern... patterns) {
-		return new GameOfLife(new Board(flatMap(asList(patterns), on(Pattern.class).getCells())));
+		return new GameOfLife(flatMap(asList(patterns), on(Pattern.class).getCells()));
 	}
 
 	void play() {
@@ -36,8 +37,8 @@ public class GameOfLife implements Iterator<GameOfLife> {
 	@Override
 	public void remove() {}
 
-	private GameOfLife(Board nextBoard) {
-		this.nextBoard = nextBoard;
+	private GameOfLife(Collection<Cell> cells) {
+		this.nextBoard = new Board(cells);
 	}
 
 	private Board board, nextBoard;

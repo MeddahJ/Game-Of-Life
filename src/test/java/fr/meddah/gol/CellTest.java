@@ -1,5 +1,7 @@
 package fr.meddah.gol;
 
+import java.util.List;
+
 import org.junit.Test;
 
 import static com.google.common.collect.Lists.*;
@@ -29,35 +31,38 @@ public class CellTest {
 
 	@Test
 	public void should_be_alive() {
-		assertThat(cell(0, 1).isAliveAmong(asList(cell(0, 1), cell(0, 2)))).isTrue();
+		assertThat(cell(0, 1).isAliveAround(asList(cell(0, 1), cell(0, 2)))).isTrue();
 	}
 
 	@Test
 	public void should_be_dead() {
-		assertThat(cell(0, 0).isAliveAmong(asList(cell(0, 1), cell(0, 2)))).isFalse();
+		assertThat(cell(0, 0).isAliveAround(asList(cell(0, 1), cell(0, 2)))).isFalse();
 	}
 
 	@Test
 	@SuppressWarnings("unchecked")
 	public void should_die_if_less_than_two_cells_around() {
-		assertThat(cell(0, 0).willBeAliveAmong(EMPTY_LIST)).isFalse();
-		assertThat(cell(0, 0).willBeAliveAmong(newArrayList(cell(0, 0)))).isFalse();
+		assertThat(cell(0, 0).willBeAliveAround(EMPTY_LIST)).isFalse();
+		assertThat(cell(0, 0).willBeAliveAround(newArrayList(cell(0, 0)))).isFalse();
 	}
 
 	@Test
 	public void should_live_if_two_or_three_cells_around() {
-		assertThat(cell(0, 2).willBeAliveAmong(newArrayList(cell(0, 0), cell(0, 1), cell(0, 2), cell(1, 1)))).isTrue();
-		assertThat(cell(1, 1).willBeAliveAmong(newArrayList(cell(0, 0), cell(0, 1), cell(0, 2), cell(1, 1)))).isTrue();
+		List<Cell> expectedCells = asList(cell(0, 0), cell(0, 1), cell(0, 2), cell(1, 1));
+		assertThat(cell(0, 2).willBeAliveAround(expectedCells)).isTrue();
+		assertThat(cell(1, 1).willBeAliveAround(expectedCells)).isTrue();
 	}
 
 	@Test
 	public void should_die_if_more_than_three_cells_around() {
-		assertThat(cell(1, 1).willBeAliveAmong(newArrayList(cell(0, 0), cell(0, 1), cell(0, 2), cell(1, 0), cell(1, 1)))).isFalse();
+		List<Cell> expectedCells = asList(cell(0, 0), cell(0, 1), cell(0, 2), cell(1, 0), cell(1, 1));
+		assertThat(cell(1, 1).willBeAliveAround(expectedCells)).isFalse();
 	}
 
 	@Test
 	public void should_animate_if_three_cells_around() {
-		assertThat(cell(1, 1).willBeAliveAmong(newArrayList(cell(0, 0), cell(0, 1), cell(0, 2)))).isTrue();
+		List<Cell> expectedCells = asList(cell(0, 0), cell(0, 1), cell(0, 2));
+		assertThat(cell(1, 1).willBeAliveAround(expectedCells)).isTrue();
 	}
 
 	private static Cell cell(Object x, Object y) {

@@ -1,27 +1,26 @@
 package fr.meddah.gol;
 
-import java.util.Collection;
-
 import com.google.common.base.Objects;
 
 import static ch.lambdaj.Lambda.*;
 import static com.google.common.base.Objects.*;
+import static com.google.common.collect.Iterables.*;
 import static fr.meddah.gol.Tools.*;
 import static java.lang.Long.*;
 import static org.hamcrest.Matchers.*;
 
 public class Cell {
 
-	public boolean willBeAliveAmong(Collection<Cell> cells) {
-		int aliveNeighbours = select(cellsBy(NEIGHBOURS), having(on(Cell.class).isAliveAmong(cells))).size();
-		return (isAliveAmong(cells) && aliveNeighbours == 2) || aliveNeighbours == 3;
+	public boolean willBeAliveAround(Iterable<Cell> cells) {
+		int aliveNeighbours = intersect(cellsBy(ONLY_NEIGHBOURS), cells).size();
+		return (isAliveAround(cells) && aliveNeighbours == 2) || aliveNeighbours == 3;
 	}
 
-	public boolean isAliveAmong(Collection<Cell> cells) {
-		return cells.contains(this);
+	public boolean isAliveAround(Iterable<Cell> cells) {
+		return contains(cells, this);
 	}
 
-	public Collection<Cell> cellsBy(Collection<Cell> cells) {
+	public Iterable<Cell> cellsBy(Iterable<Cell> cells) {
 		return collect(cells, on(Cell.class).moveBy(this));
 	}
 
@@ -62,7 +61,7 @@ public class Cell {
 
 	private final long x, y;
 
-	static final Collection<Cell>
-			NEIGHBOURS_AND_SELF = allCombinationsOf(Cell.class, range(-1, 1), range(-1, 1)),
-			NEIGHBOURS = select(NEIGHBOURS_AND_SELF, not(equalTo(new Cell(0, 0))));
+	static final Iterable<Cell>
+			WITH_NEIGHBOURS = allInstances(Cell.class, range(-1, 1), range(-1, 1)),
+			ONLY_NEIGHBOURS = select(WITH_NEIGHBOURS, not(equalTo(new Cell(0, 0))));
 }

@@ -1,45 +1,42 @@
 package fr.meddah.gol;
 
-import java.util.Collection;
 import java.util.Iterator;
 
 import static ch.lambdaj.Lambda.*;
+import static com.google.common.collect.Iterables.*;
 import static fr.meddah.gol.Pattern.*;
-import static fr.meddah.gol.Tools.*;
-import static java.util.Arrays.*;
 
-public class GameOfLife implements Iterator<GameOfLife> {
+public class GameOfLife implements Iterator<Board> {
 
 	public static void main(String[] args) {
-		forEach(firstRound(GLIDER)).play();
+		GameOfLife game = startGameWith(CELL.by(0, 1),
+				BLINKER.by(-2, 0), BLINKER.by(2, 0),
+				BLINKER.next().by(0, 2), BLINKER.next().by(0, -2));
+		forEach(game).print();
 	}
 
-	static GameOfLife firstRound(Pattern... patterns) {
-		return new GameOfLife(flatMap(asList(patterns), on(Pattern.class).getCells()));
-	}
-
-	void play() {
-		System.out.println(board);
+	static GameOfLife startGameWith(Pattern... patterns) {
+		return new GameOfLife(concat(patterns));
 	}
 
 	@Override
 	public boolean hasNext() {
-		return nextBoard.hasCells();
+		return futureCells.iterator().hasNext();
 	}
 
 	@Override
-	public GameOfLife next() {
-		board = nextBoard;
-		nextBoard = nextBoard.next();
-		return this;
+	public Board next() {
+		Board cells = new Board(futureCells);
+		futureCells = cells.next();
+		return cells;
 	}
 
 	@Override
 	public void remove() {}
 
-	private GameOfLife(Collection<Cell> cells) {
-		this.nextBoard = new Board(cells);
+	private GameOfLife(Iterable<Cell> cells) {
+		this.futureCells = cells;
 	}
 
-	private Board board, nextBoard;
+	private Iterable<Cell> futureCells;
 }

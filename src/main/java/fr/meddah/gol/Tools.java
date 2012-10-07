@@ -9,19 +9,22 @@ import com.google.common.collect.Ranges;
 
 import static ch.lambdaj.Lambda.*;
 import static com.google.common.collect.DiscreteDomains.*;
-import static com.google.common.collect.Iterables.*;
+
+import static com.google.common.collect.Lists.*;
+
 import static com.google.common.collect.Sets.*;
+import static org.apache.commons.collections15.CollectionUtils.*;
 
 public final class Tools {
 
-	public static <T> Set<T> flatMap(Collection<?> collection, Collection<T> function) {
-		return newHashSet(concat(collect(collection, function)));
+	public static <T> Collection<T> intersect(Iterable<T> first, Iterable<T> second) {
+		return intersection(newArrayList(first), newArrayList(second));
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T, U extends Comparable<U>> Collection<T> allCombinationsOf(Class<T> toClass, ContiguousSet<U> first, ContiguousSet<U> second) {
-		Collection<List<U>> constructorArguments = cartesianProduct(first, second);
-		return project(constructorArguments, toClass, on(List.class).get(0), on(List.class).get(1));
+	public static <T, U> Collection<T> allInstances(Class<T> forClass, Set<U> firstArguments, Set<U> secondArguments) {
+		Collection<List<U>> constructorArguments = cartesianProduct(firstArguments, secondArguments);
+		return project(constructorArguments, forClass, on(List.class).get(0), on(List.class).get(1));
 	}
 
 	public static ContiguousSet<Long> range(long lowerBound, long upperBound) {

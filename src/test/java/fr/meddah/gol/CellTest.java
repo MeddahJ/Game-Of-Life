@@ -17,6 +17,7 @@ public class CellTest {
 		assertThat(cell).isEqualTo(cell);
 		assertThat(cell).isEqualTo(cell(2, 0));
 		assertThat(cell).isEqualTo(cell("2", "0"));
+		assertThat(cell).isEqualTo(cell("2", 0));
 		assertThat(cell).isNotEqualTo(cell(-2, 0));
 		assertThat(cell).isNotEqualTo("2 0");
 		assertThat(cell).isNotEqualTo(null);
@@ -39,17 +40,26 @@ public class CellTest {
 	}
 
 	@Test
-	public void should_die_if_less_than_two_cells_around() {
+	public void should_die_if_zero_cells_around() {
 		Iterable<Cell> noCells = newArrayList();
 		assertThat(cell(0, 0).willBeAliveAround(noCells)).isFalse();
+	}
+
+	@Test
+	public void should_die_if_one_cell_around() {
 		Iterable<Cell> oneCell = newArrayList(cell(0, 0));
 		assertThat(cell(0, 0).willBeAliveAround(oneCell)).isFalse();
 	}
 
 	@Test
-	public void should_live_if_two_or_three_cells_around() {
+	public void should_live_if_two_cells_around() {
 		List<Cell> expectedCells = asList(cell(0, 0), cell(0, 1), cell(0, 2), cell(1, 1));
 		assertThat(cell(0, 2).willBeAliveAround(expectedCells)).isTrue();
+	}
+
+	@Test
+	public void should_live_if_three_cells_around() {
+		List<Cell> expectedCells = asList(cell(0, 0), cell(0, 1), cell(0, 2), cell(1, 1));
 		assertThat(cell(1, 1).willBeAliveAround(expectedCells)).isTrue();
 	}
 

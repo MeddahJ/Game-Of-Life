@@ -2,8 +2,7 @@ package fr.meddah.gol;
 
 import org.junit.Test;
 
-import com.google.common.collect.Iterables;
-
+import static com.google.common.collect.Iterables.*;
 import static fr.meddah.gol.Pattern.*;
 import static org.fest.assertions.Assertions.*;
 
@@ -19,23 +18,23 @@ public class BoardTest {
 	@Test
 	public void block_is_immobile() {
 		Board blockAfterOneStep = new Board(BLOCK).next();
-		assertThat(blockAfterOneStep).containsOnly(toArray(BLOCK));
+		assertThat(blockAfterOneStep).containsOnly(toCellArray(BLOCK));
 	}
 
 	@Test
 	public void blinker_has_period_of_two_and_is_stationary() {
 		Board blinkerAfterTwoSteps = new Board(BLINKER).next().next();
-		assertThat(blinkerAfterTwoSteps).containsOnly(toArray(BLINKER));
+		assertThat(blinkerAfterTwoSteps).containsOnly(toCellArray(BLINKER));
 	}
 
 	@Test
 	public void glider_has_period_of_four_and_moves_diagonally() {
 		Board gliderAfterFourSteps = new Board(GLIDER).next().next().next().next();
-		assertThat(gliderAfterFourSteps).containsOnly(toArray(GLIDER.from(-1, 1)));
+		assertThat(gliderAfterFourSteps).containsOnly(toCellArray(GLIDER.from(-1, 1)));
 	}
 
-	private static Object[] toArray(Iterable<Cell> pattern) {
-		return Iterables.toArray(pattern, Cell.class);
+	private static Object[] toCellArray(Iterable<Cell> pattern) {
+		return toArray(pattern, Cell.class);
 	}
 
 	private static String cleanToString(Board board) {

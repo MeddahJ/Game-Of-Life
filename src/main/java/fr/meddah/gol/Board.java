@@ -7,7 +7,6 @@ import static ch.lambdaj.Lambda.*;
 import static ch.lambdaj.collection.LambdaCollections.*;
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Iterables.*;
-import static com.google.common.collect.Sets.*;
 import static fr.meddah.gol.Cell.*;
 import static fr.meddah.gol.Tools.*;
 import static java.lang.String.*;
@@ -15,8 +14,8 @@ import static java.lang.String.*;
 public class Board implements Iterable<Cell> {
 
 	Board next() {
-		Iterable<Cell> withNeighbours = concat(collect(cells, on(Cell.class).cellsBy(WITH_NEIGHBOURS)));
-		return new Board(select(withNeighbours, having(on(Cell.class).willBeAliveAround(cells))));
+		Iterable<Cell> cellsAndDeadNeighbours = concat(extract(cells, on(Cell.class).cellsFrom(NEIGHBOURHOOD)));
+		return new Board(with(cellsAndDeadNeighbours).distinct().retain(having(on(Cell.class).willBeAliveAround(cells))));
 	}
 
 	void print() {
@@ -38,7 +37,7 @@ public class Board implements Iterable<Cell> {
 	}
 
 	Board(Iterable<Cell> cells) {
-		this.cells = newHashSet(cells);
+		this.cells = cells;
 	}
 
 	private final Iterable<Cell> cells;

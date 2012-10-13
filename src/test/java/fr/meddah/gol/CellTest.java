@@ -7,7 +7,6 @@ import org.junit.Test;
 import static com.google.common.collect.Lists.*;
 
 import static java.util.Arrays.*;
-import static java.util.Collections.*;
 import static org.fest.assertions.Assertions.*;
 
 public class CellTest {
@@ -26,7 +25,7 @@ public class CellTest {
 
 	@Test
 	public void shoud_translate_by_another_cell() {
-		assertThat(cell(2, 0).moveBy(cell(1, 2))).isEqualTo(cell(1, 2).moveBy(cell(2, 0)));
+		assertThat(cell(2, 0).translateBy(cell(1, 2))).isEqualTo(cell(1, 2).translateBy(cell(2, 0)));
 	}
 
 	@Test
@@ -40,10 +39,11 @@ public class CellTest {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
 	public void should_die_if_less_than_two_cells_around() {
-		assertThat(cell(0, 0).willBeAliveAround(EMPTY_LIST)).isFalse();
-		assertThat(cell(0, 0).willBeAliveAround(newArrayList(cell(0, 0)))).isFalse();
+		Iterable<Cell> noCells = newArrayList();
+		assertThat(cell(0, 0).willBeAliveAround(noCells)).isFalse();
+		Iterable<Cell> oneCell = newArrayList(cell(0, 0));
+		assertThat(cell(0, 0).willBeAliveAround(oneCell)).isFalse();
 	}
 
 	@Test

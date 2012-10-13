@@ -11,20 +11,20 @@ import static org.hamcrest.Matchers.*;
 
 public class Cell {
 
-	public boolean willBeAliveAround(Iterable<Cell> cells) {
-		int aliveNeighbours = intersect(cellsBy(ONLY_NEIGHBOURS), cells).size();
-		return (isAliveAround(cells) && aliveNeighbours == 2) || aliveNeighbours == 3;
+	boolean willBeAliveAround(Iterable<Cell> cells) {
+		int neighbours = intersect(cells, cellsFrom(MOORE_NEIGHBOURHOOD)).size();
+		return (isAliveAround(cells) && neighbours == 2) || neighbours == 3;
 	}
 
-	public boolean isAliveAround(Iterable<Cell> cells) {
+	boolean isAliveAround(Iterable<Cell> cells) {
 		return contains(cells, this);
 	}
 
-	public Iterable<Cell> cellsBy(Iterable<Cell> cells) {
-		return collect(cells, on(Cell.class).moveBy(this));
+	Iterable<Cell> cellsFrom(Iterable<Cell> cells) {
+		return extract(cells, on(Cell.class).translateBy(this));
 	}
 
-	public Cell moveBy(Cell cell) {
+	Cell translateBy(Cell cell) {
 		return new Cell(cell.x + x, cell.y + y);
 	}
 
@@ -62,6 +62,6 @@ public class Cell {
 	private final long x, y;
 
 	static final Iterable<Cell>
-			WITH_NEIGHBOURS = allInstances(Cell.class, range(-1, 1), range(-1, 1)),
-			ONLY_NEIGHBOURS = select(WITH_NEIGHBOURS, not(equalTo(new Cell(0, 0))));
+			NEIGHBOURHOOD = allInstances(Cell.class, range(-1, 1), range(-1, 1)),
+			MOORE_NEIGHBOURHOOD = select(NEIGHBOURHOOD, not(equalTo(new Cell(0, 0))));
 }

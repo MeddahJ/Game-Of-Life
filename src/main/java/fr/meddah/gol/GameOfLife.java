@@ -1,21 +1,18 @@
 package fr.meddah.gol;
 
-import java.util.Iterator;
+import com.google.common.collect.UnmodifiableIterator;
 
 import static ch.lambdaj.Lambda.*;
 import static com.google.common.collect.Iterables.*;
 import static fr.meddah.gol.Pattern.*;
 
-public class GameOfLife implements Iterator<Board> {
+public class GameOfLife extends UnmodifiableIterator<Board> {
 
 	public static void main(String[] args) {
-		GameOfLife game = startGameWith(CELL.by(0, 1),
-				BLINKER.by(-2, 0), BLINKER.by(2, 0),
-				BLINKER.next().by(0, 2), BLINKER.next().by(0, -2));
-		forEach(game).print();
+		forEach(game(CELL.from(0, 1), BLINKER.from(-2, 0), BLINKER.from(2, 0), BLINKER.next().from(0, 2), BLINKER.next().from(0, -2))).print();
 	}
 
-	static GameOfLife startGameWith(Pattern... patterns) {
+	static GameOfLife game(Pattern... patterns) {
 		return new GameOfLife(concat(patterns));
 	}
 
@@ -30,9 +27,6 @@ public class GameOfLife implements Iterator<Board> {
 		futureCells = cells.next();
 		return cells;
 	}
-
-	@Override
-	public void remove() {}
 
 	private GameOfLife(Iterable<Cell> cells) {
 		this.futureCells = cells;

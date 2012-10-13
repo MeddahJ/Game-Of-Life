@@ -31,7 +31,7 @@ public class BoardTest {
 	@Test
 	public void glider_has_period_of_four_and_moves_diagonally() {
 		Board gliderAfterFourSteps = new Board(GLIDER).next().next().next().next();
-		assertThat(gliderAfterFourSteps).containsOnly(toArray(GLIDER.by(-1, 1)));
+		assertThat(gliderAfterFourSteps).containsOnly(toArray(GLIDER.from(-1, 1)));
 	}
 
 	private static Object[] toArray(Iterable<Cell> pattern) {

@@ -14,8 +14,8 @@ public class Pattern implements Iterable<Cell> {
 			SPACESHIP = pattern(cell(0, 0), cell(0, 2), cell(1, 3), cell(2, 3),
 					cell(3, 0), cell(3, 3), cell(4, 1), cell(4, 2), cell(4, 3));
 
-	public Pattern by(int x, int y) {
-		return new Pattern(cell(x, y).cellsBy(cells));
+	public Pattern from(int x, int y) {
+		return new Pattern(cell(x, y).cellsFrom(cells));
 	}
 
 	public Pattern next() {

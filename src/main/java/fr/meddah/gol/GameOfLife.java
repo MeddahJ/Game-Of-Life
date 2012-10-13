@@ -9,7 +9,7 @@ import static fr.meddah.gol.Pattern.*;
 public class GameOfLife extends UnmodifiableIterator<Board> {
 
 	public static void main(String[] args) {
-		forEach(game(CELL.from(0, 1), BLINKER.from(-2, 0), BLINKER.from(2, 0), BLINKER.next().from(0, 2), BLINKER.next().from(0, -2))).print();
+		forEach(game(GLIDER)).print();
 	}
 
 	static GameOfLife game(Pattern... patterns) {

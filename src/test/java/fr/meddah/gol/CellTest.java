@@ -7,21 +7,21 @@ import org.junit.Test;
 import static com.google.common.collect.Lists.*;
 
 import static java.util.Arrays.*;
-import static org.fest.assertions.Assertions.*;
+import static org.fest.assertions.api.Assertions.*;
+import static org.junit.Assert.*;
 
 public class CellTest {
 
 	@Test
 	public void should_game_coverage_metrics() {
-		Cell cell = cell(2, 0);
-		assertThat(cell).isEqualTo(cell);
-		assertThat(cell).isEqualTo(cell(2, 0));
-		assertThat(cell).isEqualTo(cell("2", "0"));
-		assertThat(cell).isEqualTo(cell("2", 0));
-		assertThat(cell).isNotEqualTo(cell(-2, 0));
-		assertThat(cell).isNotEqualTo("2 0");
-		assertThat(cell).isNotEqualTo(null);
-		assertThat(cell.toString()).isEqualTo("Cell{x=2, y=0}");
+		Cell cell = cell(2, 1);
+		assertThat(cell.toString()).isEqualTo("Cell{x=2, y=1}");
+		assertTrue(cell.equals(cell));
+		assertTrue(cell.equals(cell(2, 1)));
+		assertTrue(cell.equals(cell("2", 1)));
+		assertFalse(cell.equals(cell(2, -1)));
+		assertFalse(cell.equals("2 1"));
+		assertFalse(cell.equals(null));
 	}
 
 	@Test

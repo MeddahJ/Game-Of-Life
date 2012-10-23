@@ -18,7 +18,7 @@ public class Board implements Iterable<Cell> {
 		return new Board(with(cellsAndDeadNeighbours).distinct().retain(having(on(Cell.class).willBeAliveAround(cells))));
 	}
 
-	void print() {
+	void showBoard() {
 		System.out.print(this);
 	}
 

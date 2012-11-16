@@ -27,9 +27,9 @@ public class Board implements Iterable<Cell> {
 	public String toString() {
 		ContiguousSet<Long> abscissae = range(minFrom(boardCells).getX(), maxFrom(boardCells).getX());
 		ContiguousSet<Long> ordinates = range(minFrom(boardCells).getY(), maxFrom(boardCells).getY());
-		String boardDelimiter = format("|%s|%n", repeat("-", abscissae.size()));
+		String boardDelimiter = format("%s%n", repeat("-", abscissae.size()));
 		return with(allInstances(Cell.class, abscissae, ordinates)).extract(on(Cell.class).isAliveAround(boardCells)).join("")
-			.replace("true", "X").replace("false", " ").replaceAll(format(".{%d}", abscissae.size()), "|$0|\n") + boardDelimiter;
+			.replace("true", "X").replace("false", " ").replaceAll(format(".{%d}", abscissae.size()), "$0\n") + boardDelimiter;
 	}
 
 	@Override

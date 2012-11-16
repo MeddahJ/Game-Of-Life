@@ -11,24 +11,24 @@ public class BoardTest {
 	public void board_is_displayed_properly() {
 		Board board = new Board(BLINKER);
 		assertThat(cleanToString(board)).isEqualTo("X\nX\nX\n\n");
-		assertThat(cleanToString(board.next())).isEqualTo("XXX\n\n");
+		assertThat(cleanToString(board.nextCells())).isEqualTo("XXX\n\n");
 	}
 
 	@Test
 	public void block_is_immobile() {
-		Board blockAfterOneStep = new Board(BLOCK).next();
+		Board blockAfterOneStep = new Board(BLOCK).nextCells();
 		assertThat(blockAfterOneStep).containsAll(BLOCK);
 	}
 
 	@Test
 	public void blinker_has_period_of_two_and_is_stationary() {
-		Board blinkerAfterTwoSteps = new Board(BLINKER).next().next();
+		Board blinkerAfterTwoSteps = new Board(BLINKER).nextCells().nextCells();
 		assertThat(blinkerAfterTwoSteps).containsAll(BLINKER);
 	}
 
 	@Test
 	public void glider_has_period_of_four_and_moves_diagonally() {
-		Board gliderAfterFourSteps = new Board(GLIDER).next().next().next().next();
+		Board gliderAfterFourSteps = new Board(GLIDER).nextCells().nextCells().nextCells().nextCells();
 		assertThat(gliderAfterFourSteps).containsAll(GLIDER.from(-1, 1));
 	}
 
